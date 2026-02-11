@@ -2,6 +2,8 @@ import pygame
 from pygame.constants import HWSURFACE, DOUBLEBUF, RESIZABLE
 from texture_manager import TextureManager
 from player import Player
+from alien_wave import Wave
+from alien import Alien
 
 player = Player()
 
@@ -18,6 +20,9 @@ dt = 0.0
 
 background = pygame.Rect(0, 0, 1920, 1080)
 
+first_wave_aliens = [Alien((0,0)), Alien((64,0)), Alien((500,0))]
+wave = Wave(50, first_wave_aliens)
+
 running = True
 while running:
     # Handle input
@@ -30,8 +35,11 @@ while running:
                 running = False
                 break
 
-    pygame.draw.rect(window, (0, 0, 0), background)
     player.proccess_event(dt)
+    wave.update(dt)
+
+    pygame.draw.rect(window, (0, 0, 0), background)
+    wave.draw(window)
     player.draw(window)
     pygame.display.update()
 

@@ -11,13 +11,14 @@ class Bullet:
 
     def update(self, enimies):
         for enimy in enimies:
-            if self.pos.x >= enimy.pos.x &
-               self.pos.x < enimy.pos.y
+            pass
+
 
 
 class Player:
     def __init__(self):
         self.pos = Vector2((64*7, 64*13))
+        self.hitbox = pygame.Rect(self.pos, (64, 64))
         self.skin_name = "player"
         self.speed = 200
         self.max_hp = 3
