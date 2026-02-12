@@ -6,7 +6,8 @@ class Alien:
     last_id = 0
 
     def __init__(self, pos: Vector2, max_hp=1):
-        self.id = Alien.last_id + 1
+        Alien.last_id += 1
+        self.id = Alien.last_id
         self.pos = Vector2(pos)
         self.hitbox = pygame.Rect(self.pos, (64, 64))
         self.skin_name = "alien"

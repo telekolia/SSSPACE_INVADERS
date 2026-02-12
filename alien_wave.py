@@ -21,6 +21,9 @@ class Wave:
         for id in dead_alien_ids:
             del self.aliens[id]
 
+        if len(self.aliens) == 0:
+            return
+
         alien_and_position = []
         for alien in self.aliens.values():
             alien_and_position.append((alien, alien.pos))
@@ -39,3 +42,4 @@ class Wave:
 
         for alien in self.aliens.values():
             alien.pos.x += self.speed * dt
+            alien.hitbox.topleft = alien.pos
