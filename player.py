@@ -33,26 +33,34 @@ class Player:
         self.pos = Vector2((64*7, 64*13))
         self.hitbox = pygame.Rect(self.pos, (64, 64))
         self.skin_name = "player"
-        self.speed = 200
+        self.speed = 32
         self.max_hp = 3
         self.current_hp = 3
         self.bullets = []
+        self.fire_timeout = 0.3 # seconds
+        self.fire_timer = 0.0
+        self.move_timer = 0.0
+        self.move_timeout = 0.2
 
     def proccess_event(self, dt, aliens):
         keys = pygame.key.get_pressed()
 
-        # Движение вверх (a, LEFT)
-        if self.pos.x > 0:
-            if keys[pygame.K_a] or keys[pygame.K_LEFT]:
-                self.pos.x -= self.speed * dt
+        self.move_timer += dt
+        if self.move_timer >= self.move_timeout:
+            # Движение вверх (a, LEFT)
+            if self.pos.x > 0:
+                if keys[pygame.K_a] or keys[pygame.K_LEFT]:
+                    self.move_timer = 0.0
+                    self.pos.x -= self.speed
 
-        # Движение вправо (d, RIGHT)
-        if self.pos.x < 896:
-            if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-                self.pos.x += self.speed * dt
+            # Движение вправо (d, RIGHT)
+            if self.pos.x < 896:
+                if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
+                    self.move_timer = 0.0
+                    self.pos.x += self.speed
 
         if keys[pygame.K_w] or keys[pygame.K_UP]:
-            self.fire()
+            self.fire(dt)
 
         for bullet in self.bullets[:]:
             if bullet.armorpiercing <= 0:
@@ -63,7 +71,7 @@ class Player:
                 self.bullets.remove(bullet)
                 continue
 
-            bullet.update(aliens.values(), dt)
+            bullet.update(aliens, dt)
 
     def draw(self, window):
         texture = TextureManager.get(self.skin_name)
@@ -72,5 +80,8 @@ class Player:
         for bullet in self.bullets:
             bullet.draw(window)
 
-    def fire(self):
-        self.bullets.append(Bullet(self.pos + Vector2(28, 0), 1, 1, (0, -500)))
+    def fire(self, dt):
+        self.fire_timer += dt
+        if self.fire_timer >= self.fire_timeout:
+            self.fire_timer = 0.0
+            self.bullets.append(Bullet(self.pos + Vector2(28, 0), 1, 1, (0, -500)))

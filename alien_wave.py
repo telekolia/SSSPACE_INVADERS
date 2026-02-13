@@ -2,7 +2,9 @@ import pygame
 from pygame.math import Vector2
 
 class Wave:
-    def __init__(self, speed, aliens=[]):
+    def __init__(self, speed, aliens=None):
+        if aliens is None:
+            aliens = []
         self.aliens = {}
         for alien in aliens:
             self.aliens[alien.id] = alien

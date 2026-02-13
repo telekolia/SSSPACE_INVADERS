@@ -2,10 +2,10 @@ import pygame
 from pygame.constants import HWSURFACE, DOUBLEBUF, RESIZABLE
 from texture_manager import TextureManager
 from player import Player, Bullet
-from alien_wave import Wave
-from alien import Alien
+from wave_manager import WaveManager
 
 player = Player()
+wave_manager = WaveManager()
 
 TextureManager.load_directory('res')
 
@@ -17,9 +17,6 @@ pygame.display.set_icon(TextureManager.get("player"))
 clock = pygame.time.Clock()
 game_timer = 0.0
 dt = 0.0
-
-first_wave_aliens = [Alien((0,0)), Alien((64,0)), Alien((500,0))]
-wave = Wave(50, first_wave_aliens)
 
 running = True
 while running:
@@ -33,11 +30,11 @@ while running:
                 running = False
                 break
 
-    player.proccess_event(dt, wave.aliens)
-    wave.update(dt)
+    player.proccess_event(dt, wave_manager.aliens)
+    wave_manager.update(dt)
 
     window.fill((0, 0, 0))
-    wave.draw(window)
+    wave_manager.draw(window)
     player.draw(window)
     pygame.display.update()
 
