@@ -36,11 +36,10 @@ class Wave:
         left_border = left_border_alien.pos.x
         right_border = right_border_alien.pos.x
 
-        if left_border <= 0 or right_border > 896:
+        if left_border < 0 or right_border > 896:
             self.speed *= -1
             for alien in self.aliens.values():
                 alien.pos.y += 64
-
 
         for alien in self.aliens.values():
             alien.pos.x += self.speed * dt

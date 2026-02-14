@@ -46,6 +46,7 @@ class Player:
         keys = pygame.key.get_pressed()
 
         self.move_timer += dt
+        self.fire_timer += dt
         if self.move_timer >= self.move_timeout:
             # Движение вверх (a, LEFT)
             if self.pos.x > 0:
@@ -81,7 +82,6 @@ class Player:
             bullet.draw(window)
 
     def fire(self, dt):
-        self.fire_timer += dt
         if self.fire_timer >= self.fire_timeout:
             self.fire_timer = 0.0
             self.bullets.append(Bullet(self.pos + Vector2(28, 0), 1, 1, (0, -500)))
