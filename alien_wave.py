@@ -1,14 +1,16 @@
-import pygame
-from pygame.math import Vector2
+from pygame.mixer import Sound
 
 class Wave:
-    def __init__(self, speed, aliens=None):
+    def __init__(self, step_size=32, aliens=None):
         if aliens is None:
             aliens = []
         self.aliens = {}
         for alien in aliens:
             self.aliens[alien.id] = alien
-        self.speed = speed
+        self.step_size = step_size
+        self.step_timeout = 2.0
+        self.step_timer = 0.0
+        self.wave_sound = Sound('res/wave.mp3')
 
     def draw(self, window):
         for alien in self.aliens.values():
@@ -26,6 +28,13 @@ class Wave:
         if len(self.aliens) == 0:
             return
 
+        self.step_timer += dt
+        if self.step_timer < self.step_timeout:
+            return
+
+        self.step_timer = 0.0
+        self.wave_sound.play()
+
         alien_and_position = []
         for alien in self.aliens.values():
             alien_and_position.append((alien, alien.pos))
@@ -37,10 +46,14 @@ class Wave:
         right_border = right_border_alien.pos.x
 
         if left_border < 0 or right_border > 896:
-            self.speed *= -1
+            self.step_size *= -1
             for alien in self.aliens.values():
                 alien.pos.y += 64
 
         for alien in self.aliens.values():
-            alien.pos.x += self.speed * dt
+            alien.pos.x += self.step_size
             alien.hitbox.topleft = alien.pos
+
+    def extend(self, aliens):
+        for alien in aliens:
+            self.aliens[alien.id] = alien

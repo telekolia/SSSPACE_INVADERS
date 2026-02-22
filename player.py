@@ -76,12 +76,14 @@ class Player:
 
     def draw(self, window):
         texture = TextureManager.get(self.skin_name)
+        texture = pygame.transform.scale_by(texture, 4.0)
         window.blit(texture, self.pos)
 
         for bullet in self.bullets:
             bullet.draw(window)
 
     def fire(self, dt):
-        if self.fire_timer >= self.fire_timeout:
+        # if self.fire_timer >= self.fire_timeout:
+        if len(self.bullets) == 0:
             self.fire_timer = 0.0
             self.bullets.append(Bullet(self.pos + Vector2(28, 0), 1, 1, (0, -500)))

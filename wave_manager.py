@@ -5,48 +5,37 @@ from pygame.math import Vector2
 
 class WaveManager:
     def __init__(self):
-        self.waves = []
-        # self.aliens = []
+        self.wave = Wave(16)
 
     def update(self, dt):
-        for wave in self.waves[:]:
-            if len(wave.aliens) == 0:
-                self.waves.remove(wave)
-
-        if len(self.waves) == 0:
-            number_of_waves = random.randint(3, 8)
-            for h in range(number_of_waves):
-                if random.random() > 0.7:
-                    aliens_collection = [Alien((0,0), 1) for _ in range(5)] # easy_wave
+        if len(self.wave.aliens) == 0:
+            for h in range(5):
+                if h % 2 == 0:
+                    aliens_collection = [Alien((0,0), 1, "a") for _ in range(12)] # easy_wave
                 else:
-                    aliens_collection = [Alien((0,0), i) for _ in range(4) for i in range(1, 2)] # difficult_wave
+                    aliens_collection = [Alien((0,0), 2, "b") for _ in range(12)] # difficult_wave
 
-                possible_positions = [(i, 0) for i in range(0, 10*64, 64)]
+                possible_positions = [(i, 0) for i in range(128, 896, 66)]
                 random.shuffle(possible_positions)
                 for alien in aliens_collection:
                     alien.pos = Vector2(possible_positions.pop())
                     alien.pos.y = h * 64
 
-                # self.aliens.extend(aliens_collection)
-                self.waves.append(Wave(50, aliens_collection))
+                self.wave.extend(aliens_collection)
 
-        for wave in self.waves:
-            wave.update(dt)
+        new_step_timeout = 1.0 * len(self.wave.aliens) / 60.0
+        self.wave.step_timeout = new_step_timeout
+        self.wave.update(dt)
 
     def draw(self, window):
-        if len(self.waves) == 0:
-            return
-
-        for wave in self.waves:
-            wave.draw(window)
+            self.wave.draw(window)
 
     @property
     def aliens(self):
         aliens = []
-        if len(self.waves) == 0:
+        if len(self.wave.aliens) == 0:
             return aliens
 
-        for wave in self.waves:
-            aliens.extend(wave.aliens.values())
+        aliens.extend(self.wave.aliens.values())
 
         return aliens
