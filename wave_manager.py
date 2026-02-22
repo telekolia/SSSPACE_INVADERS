@@ -19,7 +19,7 @@ class WaveManager:
                 random.shuffle(possible_positions)
                 for alien in aliens_collection:
                     alien.pos = Vector2(possible_positions.pop())
-                    alien.pos.y = h * 64
+                    alien.pos.y = (h + 2) * 64
 
                 self.wave.extend(aliens_collection)
 

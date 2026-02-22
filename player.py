@@ -2,6 +2,8 @@ import pygame
 from pygame.math import Vector2
 from texture_manager import TextureManager
 from math import atan
+from pygame.mixer import Sound
+from random import shuffle
 
 class Bullet:
     def __init__(self, pos: Vector2, damage, armorpiercing, speed: Vector2):
@@ -41,6 +43,9 @@ class Player:
         self.fire_timer = 0.0
         self.move_timer = 0.0
         self.move_timeout = 0.2
+        self.fire_sounds = [Sound('res/fire1.ogg'), Sound('res/fire2.ogg'), Sound('res/fire3.ogg')]
+        for sound in self.fire_sounds:
+            sound.set_volume(0.4)
 
     def proccess_event(self, dt, aliens):
         keys = pygame.key.get_pressed()
@@ -87,3 +92,6 @@ class Player:
         if len(self.bullets) == 0:
             self.fire_timer = 0.0
             self.bullets.append(Bullet(self.pos + Vector2(28, 0), 1, 1, (0, -500)))
+
+            shuffle(self.fire_sounds)
+            self.fire_sounds[0].play()
