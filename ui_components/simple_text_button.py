@@ -8,7 +8,7 @@ class Button():
                  background_color: tuple[int, int, int] = (0, 0, 0),
                  text_color: tuple[int, int, int] = (255, 255, 255),
                  hover_background_color: tuple[int, int, int] = (0, 0, 0),
-                 hover_text_color: tuple[int, int, int] = (20, 20, 0)) -> None:
+                 hover_text_color: tuple[int, int, int] = (255, 255, 0)) -> None:
         self.is_hovered: bool = False
 
         self.pos: pygame.Vector2 = pygame.Vector2(position)

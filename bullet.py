@@ -17,6 +17,8 @@ class Bullet:
         self.damage: int = damage
         self.armorpiercing: int = armorpiercing
         self.speed: pygame.Vector2 = pygame.Vector2(speed)
+        self.bullet_surface = texture_manager.TextureManager.get(self.texture_name)
+        self.bullet_surface = pygame.transform.scale_by(self.bullet_surface, 4.0)
 
     def update(self, targets: collections.abc.Iterable[alien.Alien | player.Player], dt: float) -> None:
         for target in targets:
@@ -28,8 +30,7 @@ class Bullet:
         self.hitbox.topleft = self.pos
 
     def draw(self, window: pygame.Surface) -> None:
-        texture = texture_manager.TextureManager.get(self.texture_name)
         angle = self.speed.as_polar()[1]
-        texture = pygame.transform.rotate(texture, -angle - 90)
-        texture_rect = texture.get_rect(center=self.hitbox.center)
-        window.blit(texture, self.pos)
+        self.bullet_surface = pygame.transform.rotate(self.bullet_surface, -angle - 90)
+        bullet_rect = self.bullet_surface.get_rect(center=self.hitbox.center)
+        window.blit(self.bullet_surface, self.pos)

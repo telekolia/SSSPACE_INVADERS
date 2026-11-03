@@ -25,7 +25,7 @@ class MainMenu():
     def draw(self) -> None:
         self.window.fill((0, 0, 0))
         self.window.blit(self.game_title_image, self.game_title_image.get_rect(midtop=(self.center_x, 64)))
-        self.window.blit(self.author_note_image, self.author_note_image.get_rect(midtop=(self.center_x, 64 * 2)))
+        self.window.blit(self.author_note_image, self.author_note_image.get_rect(midtop=(self.center_x + 128, 64 * 1.5)))
 
         self.start_button.draw(self.window)
         self.exit_button.draw(self.window)
