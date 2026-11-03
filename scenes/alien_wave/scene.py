@@ -1,23 +1,23 @@
-from player import Player
-from wave_manager import WaveManager
-from ui import UI
+import player
+import wave_manager
+import ui
 import pygame
 
 class AlienWave():
-    def __init__(self, window: pygame.Surface):
-        self.window = window
+    def __init__(self, window: pygame.Surface) -> None:
+        self.window: pygame.Surface = window
 
-        self.ui = UI()
+        self.ui: ui.UI = ui.UI()
         self.ui.player_name_pos = pygame.Vector2(0, 0)
         self.ui.score_pos = pygame.Vector2(64 * 7, 0)
         self.ui.hp_bar_pos = pygame.Vector2(0, 64)
 
-        self.clock = pygame.time.Clock()
-        self.game_timer = 0.0
-        self.dt = 0.0
+        self.clock: pygame.time.Clock = pygame.time.Clock()
+        self.game_timer: float = 0.0
+        self.dt: float = 0.0
 
-        self.player = Player()
-        self.wave_manager = WaveManager()
+        self.player: player.Player = player.Player()
+        self.wave_manager: wave_manager.WaveManager = wave_manager.WaveManager()
 
     def draw(self) -> None:
         self.window.fill((0, 0, 0))
@@ -25,7 +25,7 @@ class AlienWave():
         self.player.draw(self.window)
         self.ui.draw(self.window)
 
-    def startScene(self) -> int:
+    def start_scene(self) -> int:
         while True:
             self.dt = self.clock.tick(60) / 1000.0
 
@@ -36,7 +36,7 @@ class AlienWave():
                     return 0
 
             self.player.proccess_event(self.dt, self.wave_manager.aliens)
-            self.wave_manager.update(self.dt)
+            self.wave_manager.update(self.dt, self.player)
             self.ui.hp_amount = self.player.current_hp
 
             if (self.player.current_hp <= 0):

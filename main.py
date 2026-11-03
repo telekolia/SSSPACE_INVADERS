@@ -1,28 +1,27 @@
 import pygame
-from pygame.constants import HWSURFACE, DOUBLEBUF
-from texture_manager import TextureManager
-from scenes.main_menu.scene import MainMenu
-from scenes.alien_wave.scene import AlienWave
+import texture_manager
+import scenes.main_menu.scene as main_menu_scene
+import scenes.alien_wave.scene as alien_wave_scene
 
-TextureManager.load_directory('res')
+texture_manager.TextureManager.load_directory('res')
 
 pygame.init()
-window = pygame.display.set_mode((64 * 15, 64 * 15), HWSURFACE | DOUBLEBUF)
+window = pygame.display.set_mode((64 * 15, 64 * 15), pygame.HWSURFACE | pygame.DOUBLEBUF)
 pygame.display.set_caption("SSSPACE INVADERS!")
-pygame.display.set_icon(TextureManager.get("player"))
+pygame.display.set_icon(texture_manager.TextureManager.get("player"))
 
 pygame.mixer.init()
 pygame.mixer.set_num_channels(32)
 
-main_menu = MainMenu(window)
+main_menu = main_menu_scene.MainMenu(window)
 
 while True:
-    result = main_menu.startScene()
+    result = main_menu.start_scene()
     if (result == 1):
         break
     if (result == 0):
-        game_scene = AlienWave(window)
-        game_scene.startScene()
+        game_scene = alien_wave_scene.AlienWave(window)
+        game_scene.start_scene()
         pygame.mixer.stop()
 
 pygame.quit()

@@ -1,21 +1,21 @@
 import pygame
-from pygame.math import Vector2
-from texture_manager import TextureManager
+import texture_manager
+import bullet
 
 class Alien:
-    last_id = 0
+    last_id: int = 0
 
-    def __init__(self, pos: Vector2, max_hp=1, skin_name="a"):
+    def __init__(self, pos: pygame.Vector2 | tuple[float, float], max_hp: int = 1, skin_name: str = "a") -> None:
         Alien.last_id += 1
-        self.id = Alien.last_id
-        self.pos = Vector2(pos)
-        self.hitbox = pygame.Rect(self.pos, (64, 64))
-        self.skin_name = skin_name
-        self.max_hp = max_hp
-        self.current_hp = max_hp
-        self.bullets = []
+        self.id: int = Alien.last_id
+        self.pos: pygame.Vector2 = pygame.Vector2(pos)
+        self.hitbox: pygame.Rect = pygame.Rect(self.pos, (64, 64))
+        self.skin_name: str = skin_name
+        self.max_hp: int = max_hp
+        self.current_hp: int = max_hp
+        self.bullets: list[bullet.Bullet] = []
 
-    def draw(self, window):
-        texture = TextureManager.get(self.skin_name)
+    def draw(self, window: pygame.Surface) -> None:
+        texture = texture_manager.TextureManager.get(self.skin_name)
         texture = pygame.transform.scale_by(texture, 4.0)
         window.blit(texture, self.pos)

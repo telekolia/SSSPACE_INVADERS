@@ -1,53 +1,27 @@
 import pygame
-from pygame.math import Vector2
-from texture_manager import TextureManager
-from math import atan
-from pygame.mixer import Sound
-from random import shuffle
-
-class Bullet:
-    def __init__(self, pos: Vector2, damage, armorpiercing, speed: Vector2):
-        self.pos = Vector2(pos)
-        self.texture_name = "bullet"
-        self.hitbox = pygame.Rect(self.pos, (8, 16))
-        self.damage = damage
-        self.armorpiercing = armorpiercing
-        self.speed = Vector2(speed)
-
-    def update(self, aliens, dt):
-        for alien in aliens:
-            if self.hitbox.colliderect(alien.hitbox):
-                alien.current_hp -= self.damage
-                self.armorpiercing -= 1
-
-        self.pos += self.speed * dt
-        self.hitbox.topleft = self.pos
-
-    def draw(self, window):
-        texture = TextureManager.get(self.texture_name)
-        angle = self.speed.as_polar()[1]
-        pygame.transform.rotate(texture, -angle)
-        window.blit(texture, self.pos)
-
+import texture_manager
+import random
+import alien
+import bullet
 
 class Player:
-    def __init__(self):
-        self.pos = Vector2((64*7, 64*13))
-        self.hitbox = pygame.Rect(self.pos, (64, 64))
-        self.skin_name = "player"
-        self.speed = 32
-        self.max_hp = 3
-        self.current_hp = 3
-        self.bullets = []
-        self.fire_timeout = 0.3 # seconds
-        self.fire_timer = 0.0
-        self.move_timer = 0.0
-        self.move_timeout = 0.2
-        self.fire_sounds = [Sound('res/fire1.ogg'), Sound('res/fire2.ogg'), Sound('res/fire3.ogg')]
+    def __init__(self) -> None:
+        self.pos: pygame.Vector2 = pygame.Vector2((64*7, 64*13))
+        self.hitbox: pygame.Rect = pygame.Rect(self.pos, (64, 64))
+        self.skin_name: str = "player"
+        self.speed: int = 32
+        self.max_hp: int = 3
+        self.current_hp: int = 3
+        self.bullets: list[bullet.Bullet] = []
+        self.fire_timeout: float = 0.3 # seconds
+        self.fire_timer: float = 0.0
+        self.move_timer: float = 0.0
+        self.move_timeout: float = 0.2
+        self.fire_sounds: list[pygame.mixer.Sound] = [pygame.mixer.Sound('res/fire1.ogg'), pygame.mixer.Sound('res/fire2.ogg'), pygame.mixer.Sound('res/fire3.ogg')]
         for sound in self.fire_sounds:
             sound.set_volume(0.4)
 
-    def proccess_event(self, dt, aliens):
+    def proccess_event(self, dt: float, aliens: list[alien.Alien]) -> None:
         keys = pygame.key.get_pressed()
 
         self.move_timer += dt
@@ -65,6 +39,8 @@ class Player:
                     self.move_timer = 0.0
                     self.pos.x += self.speed
 
+            self.hitbox.topleft = self.pos
+
         if keys[pygame.K_w] or keys[pygame.K_UP]:
             self.fire(dt)
 
@@ -79,19 +55,19 @@ class Player:
 
             bullet.update(aliens, dt)
 
-    def draw(self, window):
-        texture = TextureManager.get(self.skin_name)
+    def draw(self, window: pygame.surface.Surface) -> None:
+        texture = texture_manager.TextureManager.get(self.skin_name)
         texture = pygame.transform.scale_by(texture, 4.0)
         window.blit(texture, self.pos)
 
         for bullet in self.bullets:
             bullet.draw(window)
 
-    def fire(self, dt):
+    def fire(self, dt: float) -> None:
         # if self.fire_timer >= self.fire_timeout:
         if len(self.bullets) == 0:
             self.fire_timer = 0.0
-            self.bullets.append(Bullet(self.pos + Vector2(28, 0), 1, 1, (0, -500)))
+            self.bullets.append(bullet.Bullet(self.pos + pygame.Vector2(28, 0), 1, 1, (0, -500)))
 
-            shuffle(self.fire_sounds)
+            random.shuffle(self.fire_sounds)
             self.fire_sounds[0].play()

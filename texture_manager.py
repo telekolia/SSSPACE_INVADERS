@@ -1,12 +1,12 @@
 import pygame
-from pathlib import Path
+import pathlib
 
 class TextureManager:
-    textures = {}
+    textures: dict[str, pygame.Surface] = {}
 
     @classmethod
-    def load_directory(self, directory_path, recursive = True):
-        path = Path(directory_path)
+    def load_directory(cls, directory_path: str | pathlib.Path, recursive: bool = True) -> None:
+        path = pathlib.Path(directory_path)
 
         if recursive:
             files = path.rglob("*.png")
@@ -23,5 +23,5 @@ class TextureManager:
                 print(f"Failed to load {file_path}: {e}")
 
     @classmethod
-    def get(self, texture_name):
+    def get(cls, texture_name: str) -> pygame.Surface:
         return TextureManager.textures[texture_name]
