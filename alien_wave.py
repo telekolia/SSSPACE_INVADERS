@@ -40,8 +40,11 @@ class Wave:
         for alien in self.aliens.values():
             if alien.current_hp <= 0:
                 dead_alien_ids.append(alien.id)
-            elif random.random() > 0.999:
-                self.alien_bullets.append(bullet_module.Bullet(alien.pos, 1, 1, (0, 300)))
+            else:
+                if random.random() > 0.999:
+                    self.alien_bullets.append(bullet_module.Bullet(alien.pos + (32, 64), 1, 1, (0, 300)))
+                if alien.pos.y > 930:
+                    player.current_hp = 0
 
         for id in dead_alien_ids:
             del self.aliens[id]

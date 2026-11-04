@@ -1,5 +1,6 @@
 import pygame
 import ui_components.simple_text_button as simple_text_button
+from texture_manager import TextureManager
 
 class MainMenu():
     game_title = "SSSPACE INVADERS"
@@ -22,10 +23,23 @@ class MainMenu():
         self.exit_button.pos.x -= self.exit_button.text_surface.get_width() / 2
         self.exit_button.colider.topleft = self.exit_button.pos
 
+        self.left_alien_surface = TextureManager.get("a")
+        self.left_alien_surface = pygame.transform.scale_by(self.left_alien_surface, 4.0)
+
+        self.right_alien_surface = TextureManager.get("b")
+        self.right_alien_surface = pygame.transform.scale_by(self.right_alien_surface, 4.0)
+
     def draw(self) -> None:
         self.window.fill((0, 0, 0))
-        self.window.blit(self.game_title_image, self.game_title_image.get_rect(midtop=(self.center_x, 64)))
+        title_rect = self.game_title_image.get_rect(midtop=(self.center_x, 64))
+        self.window.blit(self.game_title_image, title_rect)
         self.window.blit(self.author_note_image, self.author_note_image.get_rect(midtop=(self.center_x + 128, 64 * 1.5)))
+
+        left_alien_topright = pygame.Vector2(title_rect.topleft) - (64, 0)
+        self.window.blit(self.left_alien_surface, self.left_alien_surface.get_rect(topright=left_alien_topright))
+
+        right_alien_topleft = pygame.Vector2(title_rect.topright) + (64, 0)
+        self.window.blit(self.right_alien_surface, self.right_alien_surface.get_rect(topleft=right_alien_topleft))
 
         self.start_button.draw(self.window)
         self.exit_button.draw(self.window)

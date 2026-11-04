@@ -17,6 +17,17 @@ class UI:
         self.heart_surface: pygame.Surface = pygame.transform.scale_by(heart_texture, 4.0)
 
     def draw(self, window: pygame.Surface) -> None:
+        panel_rect = pygame.Rect(0, 0, window.get_width(), 160)
+
+        pygame.draw.rect(window, (0, 0, 0), panel_rect)
+        pygame.draw.rect(window, (255, 255, 255), panel_rect, width=4)
+        pygame.draw.rect(
+            window,
+            (255, 255, 255),
+            panel_rect.inflate(-16, -16),
+            width=4
+        )
+
         if (self.hp_amount > 0):
             for i in range(self.hp_amount):
                 next_heart_pos = self.hp_bar_pos + (i * 80, 0)

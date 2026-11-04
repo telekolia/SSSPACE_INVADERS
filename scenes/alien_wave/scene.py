@@ -8,9 +8,9 @@ class AlienWave():
         self.window: pygame.Surface = window
 
         self.ui: ui.UI = ui.UI()
-        self.ui.player_name_pos = pygame.Vector2(0, 0)
-        self.ui.score_pos = pygame.Vector2(64 * 7, 0)
-        self.ui.hp_bar_pos = pygame.Vector2(0, 64)
+        self.ui.player_name_pos = pygame.Vector2(24, 20)
+        self.ui.score_pos = pygame.Vector2(64 * 7, 20)
+        self.ui.hp_bar_pos = pygame.Vector2(24, 64)
 
         self.clock: pygame.time.Clock = pygame.time.Clock()
         self.game_timer: float = 0.0
