@@ -1,1 +1,1 @@
-Plz, install pygame
+pygame==2.6.1
