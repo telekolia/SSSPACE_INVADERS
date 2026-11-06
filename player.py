@@ -9,9 +9,13 @@ class Player:
         self.pos: pygame.Vector2 = pygame.Vector2((64*7, 64*13))
         self.hitbox: pygame.Rect = pygame.Rect(self.pos, (64, 64))
         self.skin_name: str = "player"
+
         self.speed: int = 32
         self.max_hp: int = 3
         self.current_hp: int = 3
+
+        self.current_score = 0
+
         self.bullets: list[bullet.Bullet] = []
         self.fire_timeout: float = 0.3 # seconds
         self.fire_timer: float = 0.0

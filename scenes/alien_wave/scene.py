@@ -38,6 +38,7 @@ class AlienWave():
             self.player.proccess_event(self.dt, self.wave_manager.aliens)
             self.wave_manager.update(self.dt, self.player)
             self.ui.hp_amount = self.player.current_hp
+            self.ui.score = self.player.current_score
 
             if (self.player.current_hp <= 0):
                 return 0
